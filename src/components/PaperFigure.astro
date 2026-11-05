@@ -1,0 +1,21 @@
+---
+interface Props { image:string; alt:string; caption:string; label:string; width:number; height:number; compact?:boolean; }
+const { image, alt, caption, label, width, height, compact=false } = Astro.props;
+const source = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${image}`;
+---
+<figure class:list={['study-figure','paper-figure',{compact}]}>
+  <button type="button" class="figure-image" data-paper-figure aria-label={`Enlarge ${label}`}><img src={source} alt={alt} width={width} height={height} loading="lazy" decoding="async"/></button>
+  <figcaption><span>{caption}</span><button type="button" data-paper-figure aria-label={`Enlarge ${label}`}>Enlarge ↗</button></figcaption>
+</figure>
+<style>
+  .paper-figure { min-width:0; margin:0; border:1px solid var(--line); border-radius:13px; overflow:hidden; background:var(--soft); }
+  .figure-image { display:flex; align-items:center; justify-content:center; width:100%; border:0; padding:10px; background:white; cursor:zoom-in; }
+  .figure-image img { display:block; width:100%; height:auto; object-fit:contain; }
+  .compact .figure-image { min-height:245px; padding:13px; }
+  .compact img { max-height:310px; }
+  figcaption { display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:10px 12px; color:var(--muted); font-size:11px; line-height:1.5; }
+  figcaption > button { flex-shrink:0; border:0; padding:0; background:transparent; color:var(--accent); font:inherit; cursor:zoom-in; text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+  @media(max-width:1000px) { .compact .figure-image { min-height:205px; padding:11px; } }
+  @media(max-width:760px) { .compact .figure-image { min-height:0; padding:14px; } .compact img { max-height:330px; } }
+  @media(max-width:520px) { .figure-image { padding:6px; } .compact .figure-image { padding:8px; } figcaption { padding:9px 10px; font-size:10px; gap:8px; } }
+</style>

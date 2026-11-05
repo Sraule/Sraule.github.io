@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+work/
+outputs/
+.DS_Store
+
+review-assets/
+private/
+*.zip
+*.pdf
+*.ppt
+*.pptx
+*.doc
+*.docx

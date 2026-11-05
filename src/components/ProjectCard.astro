@@ -1,0 +1,93 @@
+---
+import type { Project } from '../data/projects';
+import LemonStudy from './LemonStudy.astro';
+import ProjectStudy from './ProjectStudy.astro';
+import PaperFigure from './PaperFigure.astro';
+import { projectStudies } from '../data/projectStudies';
+interface Props { project: Project; index: number; }
+const { project, index } = Astro.props;
+---
+<article class={`project-card project-detail ${project.tone}`} id={project.id} aria-labelledby={`${project.id}-heading`}>
+  <header class="detail-header">
+    <div class="detail-topline"><span>{String(index+1).padStart(2,'0')} / {project.area}</span><span>{project.year}</span></div>
+    <h3 id={`${project.id}-heading`}>{project.name}</h3>
+    <p class="detail-subtitle">{project.title}</p>
+    <p class="detail-intro">{project.description}</p>
+  </header>
+  <div class="detail-grid">
+    <div class="detail-media">
+      <PaperFigure image={project.image} alt={project.alt} caption={project.caption} label={`${project.name} Figure ${project.id === 'lemon' ? '2' : '1'}`} width={1400} height={660} compact/>
+      {project.facts.length>0 && <dl class="detail-facts">{project.facts.map(fact=><div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>}
+      <ul class="detail-tags" aria-label={`${project.name} topics`}>{project.tags.map(tag=><li>{tag}</li>)}</ul>
+    </div>
+    <div class="detail-story">
+      <section aria-labelledby={`${project.id}-question`}><h4 id={`${project.id}-question`} class="detail-label">Research question</h4><p class="detail-question">{project.question}</p></section>
+      <section class="detail-approach" aria-labelledby={`${project.id}-approach`}><h4 id={`${project.id}-approach`} class="detail-label">{project.id === 'lemon' ? '01 / Benchmark construction' : '01 / Lifecycle formulation'}</h4><ol>{project.approach.map((step,stepIndex)=><li><span class="approach-number" aria-hidden="true">{stepIndex+1}</span><div><h5>{step.title}</h5><p>{step.description}</p></div></li>)}</ol></section>
+    </div>
+  </div>
+  {project.id === 'lemon' && <LemonStudy/>}
+  {projectStudies[project.id] && <ProjectStudy study={projectStudies[project.id]} projectId={project.id}/>}
+  {project.takeaway && <div class="detail-footer">
+    <section aria-labelledby={`${project.id}-takeaway`}><h4 id={`${project.id}-takeaway`} class="detail-label">{project.takeaway.label}</h4><p>{project.takeaway.description}</p></section>
+  </div>}
+</article>
+
+<style>
+  .project-detail { padding:29px 32px 27px; border-radius:22px; }
+  .detail-topline { display:flex; align-items:baseline; justify-content:space-between; gap:20px; color:var(--green); font-size:11px; font-weight:500; line-height:1.5; letter-spacing:.07em; text-transform:uppercase; }
+  .detail-topline > span:last-child { color:var(--subtle); font-variant-numeric:tabular-nums; }
+  .detail-header h3 { margin-top:12px; font-size:34px; font-weight:600; line-height:1.15; letter-spacing:-.045em; }
+  .detail-subtitle { margin-top:8px; color:var(--ink); font-size:17px; line-height:1.5; font-weight:500; letter-spacing:-.012em; }
+  .detail-intro { max-width:85ch; margin-top:11px; color:var(--muted); font-size:14px; line-height:1.75; text-wrap:pretty; }
+  .detail-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.17fr); gap:31px; align-items:start; margin-top:25px; }
+  .detail-media,.detail-story { min-width:0; }
+  .detail-facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; padding:0; margin:20px 0 0; }
+  .detail-facts > div { display:grid; align-content:start; }
+  .detail-facts dd { grid-row:1; margin:0; color:var(--ink); font-size:27px; font-weight:500; line-height:1.2; letter-spacing:-.025em; font-variant-numeric:tabular-nums; }
+  .detail-facts dt { grid-row:2; margin-top:6px; color:var(--muted); font-size:11px; line-height:1.5; }
+  .detail-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:19px; }
+  .detail-tags li { padding:5px 8px; border-radius:6px; background:var(--soft); color:var(--muted); font-size:11px; line-height:1.5; }
+  .detail-label { color:var(--green); font-size:11px; font-weight:600; line-height:1.5; letter-spacing:.085em; text-transform:uppercase; }
+  .detail-question { margin-top:9px; color:var(--ink); font-size:15px; line-height:1.75; letter-spacing:-.01em; text-wrap:pretty; }
+  .detail-approach { margin-top:21px; }
+  .detail-approach ol { display:grid; gap:15px; list-style:none; padding:0; margin:13px 0 0; }
+  .detail-approach li { display:flex; align-items:flex-start; gap:11px; }
+  .approach-number { display:grid; place-items:center; flex:0 0 23px; width:23px; height:23px; margin-top:1px; border:1px solid var(--line); border-radius:7px; color:var(--accent); background:var(--soft); font-size:11px; line-height:1; font-variant-numeric:tabular-nums; }
+  .detail-approach h5 { margin:0; color:var(--ink); font-size:13.5px; font-weight:500; line-height:1.6; }
+  .detail-approach li p { margin-top:4px; color:var(--muted); font-size:13px; line-height:1.75; text-wrap:pretty; }
+  .detail-footer { margin-top:25px; padding-top:21px; border-top:1px solid var(--line); }
+
+
+  .detail-footer p { margin-top:9px; color:var(--muted); font-size:13px; line-height:1.8; text-wrap:pretty; }
+  @media(max-width:1000px) {
+    .project-detail { padding:26px; }
+    .detail-grid { gap:24px; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); }
+    .detail-facts { gap:10px; }
+    .detail-facts dd { font-size:25px; }
+
+
+  }
+  @media(max-width:760px) {
+    .detail-grid { grid-template-columns:minmax(0,1fr); gap:25px; }
+    .detail-facts { max-width:480px; }
+
+    .detail-question { font-size:15px; }
+    .detail-approach h5 { font-size:14px; }
+    .detail-approach li p,.detail-footer p { font-size:14px; }
+  }
+  @media(max-width:520px) {
+    .project-detail { padding:23px 20px; border-radius:19px; }
+    .detail-topline { font-size:10.5px; gap:15px; }
+    .detail-header h3 { font-size:31px; }
+    .detail-subtitle { font-size:16px; }
+    .detail-intro { font-size:14px; }
+    .detail-grid { margin-top:21px; }
+    .detail-facts { gap:9px; }
+    .detail-facts dd { font-size:25px; }
+    .detail-facts dt { font-size:10.5px; }
+    .detail-tags { gap:6px; }
+    .detail-tags li { padding:4px 7px; font-size:11px; }
+    .detail-approach li { gap:10px; }
+    .detail-footer { margin-top:22px; }
+  }
+</style>

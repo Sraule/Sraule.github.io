@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import { profile } from '../data/profile';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const canonical = Astro.site ? new URL(import.meta.env.BASE_URL, Astro.site).href : undefined;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{profile.name} | Multimodal AI &amp; Causal Reasoning</title>
+    <meta name="description" content={`${profile.name}, M.S. student at Shanghai Jiao Tong University. Research in causal reasoning, computer vision, and multimodal intelligence.`}/>
+    <meta name="theme-color" content="#f1f3f1"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content={`${profile.name} — Academic Homepage`}/>
+    <meta property="og:description" content={profile.tagline}/>
+    <meta property="og:locale" content="en_US"/>
+    {canonical && <link rel="canonical" href={canonical}/>}
+    {canonical && <meta property="og:url" content={canonical}/>}
+    {Astro.site && <meta property="og:image" content={new URL(`${base}/images/social-cover.png`, Astro.site).href}/>}
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`}/>
+    <script is:inline>
+      try { document.documentElement.dataset.theme = localStorage.getItem('lei-shen-theme') === 'dark' ? 'dark' : 'light'; } catch { document.documentElement.dataset.theme = 'light'; }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot/>
+    <script>
+      const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      const syncTheme = () => {
+        const isDark = document.documentElement.dataset.theme === 'dark';
+        button?.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
+        button?.setAttribute('aria-pressed', String(isDark));
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isDark ? '#151d21' : '#f1f3f1');
+      };
+      syncTheme();
+      button?.addEventListener('click', () => {
+        const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = theme;
+        try { localStorage.setItem('lei-shen-theme', theme); } catch { /* Works without storage. */ }
+        syncTheme();
+      });
+      const navLinks = [...document.querySelectorAll<HTMLAnchorElement>('.nav-link')];
+      const sections = navLinks.map(link => document.getElementById(link.hash.slice(1)));
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const setActive = (active: HTMLAnchorElement) => {
+        navLinks.forEach(link => {
+          if (link === active) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      };
+      let framePending = false;
+      const updateActive = () => {
+        framePending = false;
+        const threshold = (header?.getBoundingClientRect().bottom ?? 0) + 80;
+        let index = 0;
+        sections.forEach((section, i) => { if (section && section.getBoundingClientRect().top <= threshold) index = i; });
+        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) index = navLinks.length - 1;
+        if (navLinks[index]) setActive(navLinks[index]);
+      };
+      const scheduleUpdate = () => {
+        if (!framePending) { framePending = true; requestAnimationFrame(updateActive); }
+      };
+      navLinks.forEach(link => link.addEventListener('click', () => setActive(link)));
+      window.addEventListener('scroll', scheduleUpdate, { passive: true });
+      window.addEventListener('resize', scheduleUpdate);
+      updateActive();
+    </script>
+  </body>
+</html>

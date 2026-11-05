@@ -1,0 +1,62 @@
+<dialog class="figure-dialog" aria-labelledby="paper-figure-title">
+  <div class="figure-viewer">
+    <header class="viewer-header"><h2 id="paper-figure-title">Research figure</h2><div><button type="button" class="viewer-zoom" aria-pressed="false">Actual size</button><button type="button" class="viewer-close" aria-label="Close figure">Close ×</button></div></header>
+    <div class="viewer-image"><img alt=""/></div>
+  </div>
+</dialog>
+<script>
+  const viewer = document.querySelector<HTMLDialogElement>('.figure-dialog');
+  const viewerImage = viewer?.querySelector<HTMLImageElement>('.viewer-image img');
+  const viewerTitle = viewer?.querySelector<HTMLElement>('#paper-figure-title');
+  const zoom = viewer?.querySelector<HTMLButtonElement>('.viewer-zoom');
+  if (viewer && viewerImage && viewerTitle && zoom) {
+    const resetZoom = () => {
+      viewer.classList.remove('is-zoomed');
+      zoom.textContent = 'Actual size';
+      zoom.setAttribute('aria-pressed', 'false');
+      const imageArea = viewer.querySelector<HTMLElement>('.viewer-image');
+      if (imageArea) imageArea.scrollTop = imageArea.scrollLeft = 0;
+    };
+    document.querySelectorAll<HTMLButtonElement>('[data-paper-figure]').forEach(button => {
+      button.addEventListener('click', () => {
+        const figure = button.closest('figure');
+        const image = figure?.querySelector<HTMLImageElement>('img');
+        if (!image) return;
+        viewerImage.src = image.currentSrc || image.src;
+        viewerImage.alt = image.alt;
+        viewerTitle.textContent = figure?.querySelector('figcaption > span')?.textContent || 'Research figure';
+        resetZoom();
+        viewer.showModal();
+      });
+    });
+    zoom.addEventListener('click', () => {
+      const zoomed = viewer.classList.toggle('is-zoomed');
+      zoom.textContent = zoomed ? 'Fit to view' : 'Actual size';
+      zoom.setAttribute('aria-pressed', String(zoomed));
+    });
+    viewer.querySelector('.viewer-close')?.addEventListener('click', () => viewer.close());
+    viewer.addEventListener('click', event => { if (event.target === viewer) viewer.close(); });
+    viewer.addEventListener('close', resetZoom);
+  }
+</script>
+<style>
+  .figure-dialog { width:min(1400px,calc(100vw - 32px)); max-width:none; max-height:calc(100dvh - 32px); margin:auto; padding:0; border:1px solid var(--line); border-radius:15px; color:var(--ink); background:var(--surface-strong); box-shadow:0 24px 100px #0005; }
+  .figure-dialog::backdrop { background:rgba(10,23,29,.72); backdrop-filter:blur(7px); }
+  .figure-viewer { min-width:0; }
+  .viewer-header { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 18px; border-bottom:1px solid var(--line); }
+  .viewer-header h2 { font-size:13px; font-weight:500; line-height:1.5; letter-spacing:0; }
+  .viewer-header > div { display:flex; gap:8px; flex-shrink:0; }
+  .viewer-header button { padding:7px 10px; border:1px solid var(--line); border-radius:7px; color:var(--ink); background:var(--soft); font:inherit; font-size:12px; cursor:pointer; }
+  .viewer-image { max-height:calc(100dvh - 118px); overflow:auto; background:white; }
+  .viewer-image img { display:block; width:100%; height:auto; max-height:calc(100dvh - 118px); object-fit:contain; }
+  .is-zoomed .viewer-image img { width:auto; max-width:none; max-height:none; }
+  :global(html:has(.figure-dialog[open])) { overflow:hidden; }
+  @media(max-width:520px) {
+    .viewer-header { align-items:flex-start; gap:10px; padding:12px; }
+    .viewer-header h2 { font-size:11px; }
+    .viewer-header > div { flex-direction:column; }
+    .viewer-header button { padding:6px 8px; font-size:11px; }
+    .viewer-image,.viewer-image img { max-height:calc(100dvh - 155px); }
+    .is-zoomed .viewer-image img { max-height:none; }
+  }
+</style>
