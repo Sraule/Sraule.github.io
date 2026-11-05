@@ -57,3 +57,5 @@ jobs:
       - name: Deploy reviewed build
         id: deployment
         uses: actions/deploy-pages@v4
+
+# Refresh workflow registration after enabling GitHub Actions.
