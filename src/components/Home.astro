@@ -6,9 +6,9 @@ import { home } from '../data/home';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const featured = projects.filter(project => ['lemon', 'stagescope', 'cimo'].includes(project.id));
 ---
-<section id="top" class="home-hero shell glass-panel" aria-labelledby="home-name">
+<section id="top" class="home-hero shell" aria-labelledby="home-name">
   <div class="home-main">
-    <p class="home-eyebrow">Academic profile</p>
+    <p class="home-eyebrow"><span lang="zh-Hans">上海交通大学</span><span aria-hidden="true"> / </span>SJTU</p>
     <div class="home-profile">
       <div class="home-portrait"><img src={`${base}/${profile.avatar}`} alt="Personal avatar selected by the researcher" width="120" height="120" fetchpriority="high" decoding="async"/></div>
       <div class="home-identity">
@@ -29,7 +29,7 @@ const featured = projects.filter(project => ['lemon', 'stagescope', 'cimo'].incl
   </div>
 
   <aside class="home-research" aria-labelledby="home-research-heading">
-    <div class="research-heading"><h2 id="home-research-heading">Research in focus</h2><a href="#research" aria-label="View research projects"><Icon name="external" size={18}/></a></div>
+    <div class="research-heading"><h2 id="home-research-heading">Research overview</h2><a href="#research" aria-label="View research projects"><Icon name="external" size={18}/></a></div>
     <div class="home-projects">
       {featured.map((project, index) => <a href={`#${project.id}`} class={`home-project ${project.tone}`} aria-label={`Explore ${project.name}: ${home.recentWork.find(item => item.name === project.name)?.label || project.area}`}>
         <div class="project-image"><img src={`${base}/${project.thumbnail || project.image}`} alt={project.thumbnailAlt || project.alt} width="1400" height="660" decoding="async"/></div>
@@ -43,139 +43,134 @@ const featured = projects.filter(project => ['lemon', 'stagescope', 'cimo'].incl
   </div>
 </section>
 
-<style>
 
-  .home-hero { display:grid; grid-template-columns:minmax(0,1.22fr) minmax(0,1fr); gap:28px 40px; margin-top:8px; padding:34px 36px 26px; }
-  .home-main,.home-identity { min-width:0; }
-  .home-identity { flex:1; }
-  .home-eyebrow { color:var(--green); font-size:var(--text-label); font-weight:600; line-height:1.5; letter-spacing:.11em; text-transform:uppercase; }
-  .home-profile { display:flex; align-items:center; gap:19px; margin-top:23px; }
-  .home-portrait { flex:0 0 84px; width:84px; height:84px; padding:4px; border-radius:50%; background:var(--surface-strong); border:1px solid var(--line); box-shadow:0 8px 22px -15px rgba(30,57,96,.4); }
-  .home-portrait img { width:100%; height:100%; object-fit:cover; border-radius:inherit; clip-path:circle(44.5%); transform:scale(1.12); display:block; }
-  .home-name h1 { margin:0; font-family:var(--font-display); font-size:clamp(41px,3.7vw,50px); font-weight:400; line-height:1.12; letter-spacing:-.035em; overflow-wrap:anywhere; }
-  .home-role { display:flex; flex-wrap:wrap; align-items:center; gap:4px 9px; margin-top:11px; color:var(--muted); font-size:12.5px; line-height:1.65; }
-  .home-chinese-name { color:var(--muted); font-size:14px; letter-spacing:.08em; }
+<style>
+  .home-hero { display:grid; grid-template-columns:minmax(0,1.26fr) minmax(0,1fr); gap:30px 48px; padding-top:38px; }
+  .home-main,.home-identity,.home-research { min-width:0; }
+  .home-eyebrow { color:var(--accent); font-size:10px; font-weight:500; line-height:1.6; letter-spacing:.12em; }
+  .home-eyebrow span:first-child { letter-spacing:.18em; }
+  .home-eyebrow span + span { margin-inline:6px; color:var(--line); }
+  .home-profile { display:flex; align-items:center; gap:21px; margin-top:24px; }
+  .home-portrait { flex:0 0 82px; width:82px; height:82px; padding:3px; border:1px solid var(--line); border-radius:50%; }
+  .home-portrait img { display:block; width:100%; height:100%; object-fit:cover; border-radius:inherit; clip-path:circle(45%); transform:scale(1.1); }
+  .home-name h1 { font:400 clamp(40px,4.35vw,58px)/1.1 var(--font-display); letter-spacing:-.04em; }
+  .home-role { display:flex; align-items:center; flex-wrap:wrap; gap:5px 10px; margin-top:13px; color:var(--muted); font-size:12px; line-height:1.65; }
+  .home-chinese-name { color:var(--ink); font:400 17px/1.5 var(--font-display); letter-spacing:.1em; }
   .role-divider { width:1px; height:13px; background:var(--line); }
-  .home-affiliation { display:flex; align-items:center; gap:12px; margin-top:25px; }
+  .home-role > span:last-child { flex-basis:100%; }
+  .role-divider { display:none; }
+  .home-affiliation { display:flex; align-items:center; gap:13px; margin-top:26px; }
   .home-affiliation > div { min-width:0; }
-  .home-university-logo { display:block; flex:0 0 46px; width:46px; height:46px; object-fit:contain; border-radius:50%; background:#fff; padding:3px; }
-  .home-university { color:var(--ink); font-size:17px; font-weight:500; line-height:1.45; letter-spacing:-.015em; }
-  .home-school { margin-top:5px; color:var(--muted); font-size:12.5px; line-height:1.6; }
-  .home-summary { max-width:48ch; margin-top:24px; color:var(--muted); font-size:16px; line-height:1.75; letter-spacing:-.008em; text-wrap:pretty; }
-  .home-summary:lang(zh) { line-height:1.95; letter-spacing:.015em; }
-  .home-interests { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:22px; }
-  .home-interest { display:flex; align-items:center; gap:8px; min-width:0; min-height:62px; padding:13px 11px; border:1px solid var(--line); border-radius:11px; transition:transform .2s,background .2s; }
-  .home-interest:hover { transform:translateY(-3px); background:var(--active); }
-  .interest-symbol { display:flex; align-items:center; flex-shrink:0; color:var(--green); }
-  .home-interest > span:last-child { color:var(--ink); font-size:12px; font-weight:500; line-height:1.45; }
-  .home-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; margin-top:23px; }
-  .home-email { display:inline-flex; align-items:center; gap:8px; min-height:44px; color:var(--muted); font-size:12px; line-height:1.5; }
-  .home-email:hover { color:var(--accent); }
-  .home-email svg { flex-shrink:0; }
+  .home-university-logo { display:block; width:49px; height:49px; flex:0 0 49px; object-fit:contain; border-radius:50%; background:#fff; padding:2px; }
+  .home-university { color:var(--accent); font-size:16px; font-weight:500; line-height:1.5; letter-spacing:-.015em; }
+  .home-school { margin-top:5px; color:var(--muted); font-size:12px; line-height:1.65; }
+  .home-summary { max-width:49ch; margin-top:25px; color:var(--muted); font-size:15px; line-height:1.85; text-wrap:pretty; }
+  .home-summary:lang(zh) { line-height:1.95; }
+  .home-interests { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:23px; }
+  .home-interest { display:flex; flex-direction:column; align-items:flex-start; gap:10px; padding-top:12px; border-top:1px solid var(--line); }
+  .interest-symbol { display:flex; align-items:center; color:var(--accent); }
+  .interest-symbol :global(svg) { width:18px; height:18px; }
+  .home-interest > span:last-child { color:var(--ink); font-size:12px; line-height:1.5; }
+  .home-interest:hover > span:last-child { color:var(--accent); text-decoration:underline; text-underline-offset:4px; }
+  .home-actions { display:flex; align-items:center; flex-wrap:wrap; gap:12px 22px; margin-top:25px; }
+  .home-actions .button { display:inline-flex; align-items:center; gap:20px; padding:10px 15px; min-height:43px; background:var(--accent); color:var(--bg); border:1px solid var(--accent); border-radius:3px; font-size:12px; line-height:1.6; }
+  .home-actions .button:hover { background:var(--ink); border-color:var(--ink); }
+  .home-email { display:inline-flex; align-items:center; gap:8px; min-height:40px; color:var(--muted); font-size:12px; line-height:1.6; }
   .home-email span { overflow-wrap:anywhere; }
-  .home-location { display:flex; align-items:center; gap:7px; margin-top:14px; color:var(--subtle); font-size:11.5px; line-height:1.5; }
-  .home-research { min-width:0; align-self:start; }
-  .research-heading { display:flex; align-items:center; justify-content:space-between; margin:0 3px 18px; min-height:17px; color:var(--subtle); }
-  .research-heading h2 { font-size:var(--text-label); font-weight:600; line-height:1.5; letter-spacing:.09em; text-transform:uppercase; }
-  .research-heading > a { display:grid; place-items:center; width:22px; height:17px; border-radius:6px; }
-  .research-heading > a:hover { color:var(--accent); background:var(--active); }
-  .home-projects { display:grid; gap:12px; }
-  .home-project { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.3fr); align-items:center; gap:14px; min-width:0; padding:10px; border:1px solid var(--glass-edge); border-radius:15px; background:rgba(255,255,255,.42); box-shadow:0 6px 22px -17px rgba(30,58,96,.3); transition:transform .2s,box-shadow .2s; }
-  .home-project:hover { transform:translateY(-3px); box-shadow:0 8px 26px -16px rgba(30,58,96,.4); }
-  .project-image { display:flex; align-items:center; justify-content:center; height:110px; padding:7px; border:1px solid var(--line); border-radius:8px; background:#f3f8ef; overflow:hidden; }
-  .stage .project-image,.causal .project-image { padding:5px; background:#fff; }
-  .project-image img { width:100%; height:100%; max-height:100%; display:block; object-fit:contain; }
-  .project-info { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:7px; padding-right:3px; }
-  .project-order { grid-column:1/-1; color:var(--subtle); font-size:10.5px; font-variant-numeric:tabular-nums; line-height:1; }
-  .project-info > div { min-width:0; }
-  .project-info h3 { color:var(--ink); font-size:18px; font-weight:600; line-height:1.35; letter-spacing:-.025em; }
-  .project-info p { margin-top:5px; color:var(--muted); font-size:12px; line-height:1.5; }
-  .project-arrow { display:flex; color:var(--subtle); }
-  :global([data-theme='dark']) .home-project { background:rgba(47,65,72,.30); box-shadow:0 6px 22px -17px rgba(0,0,0,.5); }
-  .home-education { grid-column:1/-1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:25px; padding-top:22px; border-top:1px solid var(--line); }
-  .education-summary { display:flex; align-items:center; gap:12px; min-width:0; }
-  .education-summary + .education-summary { border-left:1px solid var(--line); padding-left:25px; }
-  .education-symbol { display:grid; place-items:center; flex-shrink:0; width:39px; height:39px; border-radius:12px; border:1px solid var(--line); color:var(--accent); background:var(--soft); font:11px/1.2 var(--font-display); }
+  .home-email:hover { color:var(--accent); }
+  .home-email :global(svg) { flex-shrink:0; }
+  .home-location { display:flex; align-items:center; gap:7px; margin-top:12px; color:var(--subtle); font-size:11px; }
+  .home-research { align-self:start; padding-left:27px; border-left:1px solid var(--line); }
+  .research-heading { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:16px; }
+  .research-heading h2 { font:400 23px/1.3 var(--font-display); letter-spacing:-.02em; }
+  .research-heading > a { display:grid; place-items:center; width:28px; height:28px; color:var(--subtle); }
+  .research-heading > a:hover { color:var(--accent); }
+  .home-projects { display:grid; gap:0; }
+  .home-project { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:17px; align-items:center; padding-block:16px; min-width:0; border-top:1px solid var(--line); }
+  .project-image { display:flex; align-items:center; justify-content:center; min-width:0; height:111px; padding:6px; border:1px solid var(--line); background:white; }
+  .project-image img { display:block; width:100%; height:100%; max-height:100%; object-fit:contain; }
+  .project-info { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:7px; align-items:center; }
+  .project-order { grid-column:1/-1; color:var(--subtle); font:italic 11px/1.2 var(--font-display); }
+  .project-info h3 { font:400 24px/1.25 var(--font-display); letter-spacing:-.025em; }
+  .project-info p { margin-top:5px; color:var(--muted); font-size:11px; line-height:1.6; }
+  .project-arrow { display:flex; color:var(--accent); }
+  .home-project:hover h3 { color:var(--accent); }
+  .home-education { grid-column:1/-1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px; padding-top:24px; border-top:1px solid var(--line); }
+  .education-summary { display:flex; align-items:center; gap:14px; min-width:0; }
+  .education-summary + .education-summary { border-left:1px solid var(--line); padding-left:32px; }
+  .education-symbol { flex-shrink:0; color:var(--accent); font:400 15px/1.3 var(--font-display); }
   .education-copy { min-width:0; }
-  .education-degree { color:var(--ink); font-size:12px; font-weight:500; line-height:1.5; }
-  .education-school { color:var(--muted); margin-top:4px; font-size:11.5px; line-height:1.55; }
-  .education-years { flex-shrink:0; margin-left:auto; color:var(--subtle); font-size:10.5px; text-align:right; line-height:1.6; font-variant-numeric:tabular-nums; }
+  .education-degree { font-size:12px; line-height:1.6; font-weight:500; }
+  .education-school { margin-top:4px; color:var(--muted); font-size:11px; line-height:1.6; }
+  .education-years { margin-left:auto; flex-shrink:0; color:var(--subtle); font-size:10px; line-height:1.6; text-align:right; font-variant-numeric:tabular-nums; }
   .education-years small { display:block; font-size:10px; }
-  @media(max-width:1100px) {
-    .home-hero { padding:28px; gap:25px 28px; }
-    .home-profile { gap:14px; }
-    .home-portrait { flex-basis:72px; width:72px; height:72px; }
-    .home-name h1 { font-size:40px; }
-    .home-role { font-size:12px; }
-    .home-university { font-size:16px; }
-    .home-school { font-size:12px; }
-    .home-summary { font-size:15px; }
-    .home-interest { flex-direction:column; align-items:flex-start; padding:12px 10px; gap:8px; }
-    .home-project { gap:10px; }
+  @media(max-width:1050px) {
+    .home-hero { gap:27px 32px; }
+    .home-profile { gap:16px; }
+    .home-name h1 { font-size:43px; }
+    .home-portrait { width:70px; height:70px; flex-basis:70px; }
+    .home-research { padding-left:22px; }
+    .home-project { gap:12px; }
+    .project-info h3 { font-size:22px; }
     .project-image { height:106px; }
-    .project-info h3 { font-size:17px; }
-    .project-info p { font-size:11.5px; }
     .project-arrow { display:none; }
     .education-years { display:none; }
   }
-  @media(max-width:850px) {
-    .home-hero { grid-template-columns:minmax(0,1fr); }
-    .home-portrait { flex-basis:86px; width:86px; height:86px; }
+  @media(max-width:800px) {
+    .home-hero { grid-template-columns:minmax(0,1fr); padding-top:30px; gap:30px; }
     .home-profile { gap:20px; }
-    .home-name h1 { font-size:46px; }
-    .home-role { font-size:13px; }
-    .home-summary { max-width:62ch; font-size:16px; }
-    .home-interest { flex-direction:row; align-items:center; gap:9px; padding:14px 12px; }
-    .home-projects { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-    .home-project { grid-template-columns:minmax(0,1fr); gap:12px; padding:9px; }
-    .project-image { height:105px; }
-    .project-info { padding:0 3px 4px; }
+    .home-name h1 { font-size:54px; }
+    .home-portrait { width:83px; height:83px; flex-basis:83px; }
+    .home-role > span:last-child { flex-basis:auto; }
+    .role-divider { display:block; }
+    .home-summary { max-width:70ch; }
+    .home-interests { gap:25px; }
+    .home-interest { flex-direction:row; align-items:center; gap:10px; padding-top:13px; }
+    .home-research { padding-left:0; border-left:0; }
+    .home-projects { grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+    .home-project { grid-template-columns:minmax(0,1fr); padding-block:14px 0; gap:12px; }
+    .project-image { height:120px; }
+    .project-info { gap:5px; }
     .project-order { display:none; }
-    .home-education { gap:20px; }
-    .education-summary + .education-summary { padding-left:20px; }
+    .project-info p { font-size:11px; }
+    .home-education { gap:24px; }
+    .education-summary + .education-summary { padding-left:24px; }
   }
-  @media(max-width:600px) {
-    .home-hero { padding:23px 20px 20px; margin-top:5px; gap:24px; }
-    .home-profile { gap:15px; margin-top:20px; }
-    .home-portrait { flex-basis:65px; width:65px; height:65px; padding:3px; }
-    .home-name h1 { font-size:clamp(31px,8.7vw,38px); line-height:1.15; }
-    .home-role { gap:4px 7px; margin-top:7px; font-size:12px; }
-    .home-chinese-name { font-size:13px; }
+  @media(max-width:560px) {
+    .home-hero { padding-top:27px; gap:27px; }
+    .home-profile { gap:16px; margin-top:21px; }
+    .home-portrait { width:65px; height:65px; flex-basis:65px; padding:2px; }
+    .home-name h1 { font-size:clamp(31px,8.9vw,44px); }
+    .home-role { margin-top:9px; font-size:11px; gap:4px 8px; }
     .home-role > span:last-child { flex-basis:100%; }
+    .home-chinese-name { font-size:15px; }
     .role-divider { display:none; }
-    .home-affiliation { margin-top:21px; gap:10px; }
-    .home-university-logo { flex-basis:40px; width:40px; height:40px; padding:2px; }
-    .home-university { font-size:15px; }
-    .home-school { font-size:12px; line-height:1.6; }
-    .home-summary { margin-top:21px; font-size:15px; line-height:1.75; }
-    .home-interests { margin-top:20px; gap:7px; }
-    .home-interest { flex-direction:column; align-items:flex-start; gap:9px; padding:12px 9px; }
-    .home-interest > span:last-child { font-size:11.5px; }
-    .home-actions { gap:9px 15px; margin-top:21px; }
-    .home-email { font-size:12px; gap:6px; }
-    .home-location { margin-top:12px; font-size:11px; }
-    .research-heading { margin-bottom:13px; }
-    .home-projects { grid-template-columns:1fr; gap:10px; }
-    .home-project { grid-template-columns:100px minmax(0,1fr); padding:8px; gap:13px; }
-    .project-image { height:78px; padding:4px; }
-    .project-info { padding:0; }
-    .project-info h3 { font-size:17px; }
+    .home-affiliation { margin-top:23px; gap:11px; }
+    .home-university-logo { width:43px; height:43px; flex-basis:43px; }
+    .home-university { font-size:14px; }
+    .home-school { font-size:11px; }
+    .home-summary { margin-top:22px; font-size:14px; }
+    .home-interests { gap:12px; margin-top:20px; }
+    .home-interest { flex-direction:column; align-items:flex-start; gap:9px; }
+    .home-interest > span:last-child { font-size:11px; }
+    .home-actions { gap:7px 17px; margin-top:23px; }
+    .home-actions .button { gap:16px; }
+    .home-email { font-size:11px; }
+    .research-heading h2 { font-size:22px; }
+    .research-heading { margin-bottom:0; }
+    .home-projects { grid-template-columns:minmax(0,1fr); gap:0; }
+    .home-project { grid-template-columns:115px minmax(0,1fr); gap:17px; padding-block:15px; }
+    .project-image { height:86px; padding:5px; }
+    .project-info h3 { font-size:23px; }
     .project-info p { font-size:11.5px; }
     .project-arrow { display:flex; }
-    .home-education { grid-template-columns:1fr; gap:15px; padding-top:19px; }
-    .education-summary + .education-summary { border-left:0; padding-left:0; padding-top:15px; border-top:1px solid var(--line); }
-    .education-symbol { width:34px; height:34px; border-radius:10px; font-size:10px; }
-    .education-years { display:block; font-size:10px; }
+    .home-education { grid-template-columns:1fr; gap:17px; padding-top:22px; }
+    .education-summary { gap:13px; }
+    .education-summary + .education-summary { border-left:0; padding-left:0; padding-top:17px; border-top:1px solid var(--line); }
     .education-degree { font-size:11.5px; }
-    .education-school { font-size:11px; }
+    .education-years { display:block; font-size:10px; }
+    .education-school { font-size:10.5px; }
   }
-  @media(max-width:350px) {
-    .home-portrait { flex-basis:55px; width:55px; height:55px; }
-    .home-profile { gap:11px; }
-    .home-name h1 { font-size:30px; }
-    .home-project { grid-template-columns:82px minmax(0,1fr); gap:10px; }
-    .project-info h3 { font-size:16px; }
-    .project-arrow { display:none; }
-    .education-years { display:none; }
-  }
+  @media(max-width:350px) { .home-profile { gap:12px; } .home-portrait { width:54px; height:54px; flex-basis:54px; } .home-name h1 { font-size:31px; } .education-years { display:none; } .home-project { grid-template-columns:95px minmax(0,1fr); gap:14px; } }
+
 </style>

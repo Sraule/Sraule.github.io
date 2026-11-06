@@ -16,7 +16,7 @@ import { projects } from '../data/projects';
     <Home/>
 
     <section id="research" class="research-section shell section">
-      <div class="section-heading"><div class="section-label"><span>01 — Research</span><h2>Research projects</h2></div><p>Causal video prediction, multimodal understanding, and weather evolution.</p></div>
+      <div class="section-heading"><div class="section-label"><span>Research</span><h2>Research</h2></div><p>Causal video prediction, multimodal understanding, and weather evolution.</p></div>
       <div class="projects-grid">{projects.map((project,index) => project.id === 'cimo' ? <CimoPlaceholder project={project} index={index}/> : <ProjectCard project={project} index={index}/>)}</div>
       <FigureViewer/>
     </section>
@@ -24,8 +24,8 @@ import { projects } from '../data/projects';
     <Skills/>
 
     <section id="contact" class="shell contact-section">
-      <div><p class="eyebrow">03 — Contact</p><h2>Let’s exchange ideas.</h2><p>Interested in multimodal learning, vision, or causal reasoning?<br/> I’d be glad to connect.</p></div>
-      <a class="contact-email" href={`mailto:${profile.email}`}><span><span class="contact-label">Say hello</span>{profile.email}</span><Icon name="external" size={30}/></a>
+      <div><p class="eyebrow">Get in touch</p><h2>Contact</h2><p>For research inquiries and collaboration, please contact me by email.</p></div>
+      <a class="contact-email" href={`mailto:${profile.email}`}><span><span class="contact-label">Email</span>{profile.email}</span><Icon name="external" size={30}/></a>
     </section>
   </main>
   <footer class="shell footer"><p>© {new Date().getFullYear()} {profile.name} <span lang="zh-Hans">{profile.chineseName}</span></p><p>{profile.university}</p><a href="#top">Back to top ↑</a></footer>

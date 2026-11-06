@@ -23,9 +23,8 @@ export const education = [
   { degree: 'Bachelor’s degree in Automation', university: 'Nanjing University of Aeronautics and Astronautics', detail: 'Undergraduate studies', start: 'Sep 2021', end: 'Jun 2025', initials: 'NUAA', current: false },
 ];
 
-export const skills = [
-  { label: 'Implementation', icon: 'data', items: ['Python', 'PyTorch'] },
-  { label: 'Training & fine-tuning', icon: 'tune', items: ['Model training', 'Supervised fine-tuning (SFT)', 'Loss design'] },
-  { label: 'Data & evaluation', icon: 'chart', items: ['Data preprocessing', 'Experiment analysis'] },
-  { label: 'Learning methods', icon: 'model', items: ['Deep learning', 'Transformers', 'Multimodal learning'] },
-];
+// Concise skills copy; edit these two fields to update the Skills section.
+export const skills = {
+  tools: ['Python', 'PyTorch'],
+  summary: 'Data preprocessing, model training and loss design, and experiment analysis.',
+};
